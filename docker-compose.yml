@@ -1,0 +1,37 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: mosaika
+      POSTGRES_PASSWORD: mosaika
+      POSTGRES_DB: mosaika
+    ports:
+      - "5432:5432"
+    volumes:
+      - mosaika_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mosaika -d mosaika"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+  api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      MOSAIKA_DATABASE_URL: postgresql+psycopg://mosaika:mosaika@db:5432/mosaika
+      MOSAIKA_SESSION_SECRET: dev-session-secret-change-me
+      MOSAIKA_ODOO_SOURCE: mock
+      MOSAIKA_ODOO_ALLOW_PRODUCTION: "false"
+      MOSAIKA_AI_PROVIDER: mock
+      MOSAIKA_SEED_PASSWORD: mosaika-dev
+      MOSAIKA_SYNC_INTERVAL_SECONDS: "600"
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  mosaika_pg:
