@@ -1,0 +1,25 @@
+{
+  "name": "Sopralluogo",
+  "short_name": "Sopralluogo",
+  "description": "Raccolta dati di cantiere per le checklist MOSAIKA. Modulo BABOO.",
+  "start_url": "/sopralluogo/",
+  "scope": "/sopralluogo/",
+  "display": "standalone",
+  "lang": "it",
+  "background_color": "#EFF4F8",
+  "theme_color": "#3F6A8A",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

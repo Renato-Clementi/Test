@@ -15,6 +15,8 @@ from mosaika.routers.assistente import router as assistente_router
 from mosaika.routers.auth import router as auth_router
 from mosaika.routers.leads import router as leads_router
 from mosaika.routers.obiezioni import router as obiezioni_router
+from mosaika.sopralluogo.router import router as sopralluogo_router
+from mosaika.sopralluogo.storage import build_storage
 from mosaika.seed import seed
 from mosaika.services.sync import sincronizza_lead
 from mosaika.timeutil import adesso
@@ -78,10 +80,11 @@ def create_app(
                 await task
             app.state.engine.dispose()
 
-    app = FastAPI(title="MOSAIKA Lead wallbox", lifespan=lifespan)
+    app = FastAPI(title="MOSAIKA", lifespan=lifespan)
     app.state.settings = settings
     app.state.engine = make_engine(settings.database_url)
     app.state.session_factory = make_session_factory(app.state.engine)
+    app.state.storage = build_storage(settings)
     app.state.odoo_source = source if source is not None else build_odoo_source(settings)
     app.state.ai_provider = provider if provider is not None else build_provider(settings)
     app.state.sync_error = None
@@ -95,6 +98,8 @@ def create_app(
         return {
             "app": "mosaika",
             "modulo": "lead-wallbox",
+            "moduli": ["lead-wallbox", "sopralluogo"],
+            "storage": config.storage_backend,
             "odoo_source": config.odoo_source,
             "odoo_allow_production": bool(config.odoo_allow_production),
             "ai_provider": config.ai_provider,
@@ -107,10 +112,20 @@ def create_app(
     app.include_router(leads_router, prefix="/api")
     app.include_router(obiezioni_router, prefix="/api")
     app.include_router(assistente_router, prefix="/api")
+    app.include_router(sopralluogo_router, prefix="/api")
 
     frontend = settings.frontend_path()
     if not frontend.is_dir():
         raise RuntimeError(f"Frontend non trovato: {frontend}")
+    sopralluogo = frontend / "sopralluogo"
+    if not sopralluogo.is_dir():
+        raise RuntimeError(f"Frontend sopralluogo non trovato: {sopralluogo}")
+
+    app.mount(
+        "/sopralluogo",
+        StaticFiles(directory=sopralluogo, html=True),
+        name="sopralluogo",
+    )
 
     @app.get("/manifest.webmanifest")
     def manifest():

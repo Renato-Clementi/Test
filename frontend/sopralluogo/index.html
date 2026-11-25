@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#3F6A8A">
+  <meta name="robots" content="noindex">
+  <title>Sopralluogo · MOSAIKA</title>
+  <link rel="manifest" href="/sopralluogo/manifest.webmanifest">
+  <link rel="icon" href="/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Work+Sans:wght@200;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/app.css">
+  <link rel="stylesheet" href="/sopralluogo/css/app.css">
+  <script>
+    (function () {
+      var tema = localStorage.getItem("mosaika-tema");
+      if (!tema && window.matchMedia("(prefers-color-scheme: dark)").matches) tema = "dark";
+      document.documentElement.setAttribute("data-theme", tema || "light");
+    })();
+  </script>
+</head>
+<body>
+  <div id="app"></div>
+  <script type="module" src="/sopralluogo/js/app.js"></script>
+  <noscript>Serve JavaScript per raccogliere i dati del sopralluogo.</noscript>
+</body>
+</html>

@@ -121,6 +121,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 
 .barra nav {
   display: flex;
+  flex-wrap: wrap;
   gap: 12px;
 }
 

@@ -50,6 +50,20 @@ class Settings(BaseSettings):
     sync_interval_seconds: int = 600
     password_iterations: int = 120_000
 
+    # local: disco del processo. s3: backend compatibile (MinIO, AWS, …).
+    # I pezzi in arrivo restano sempre su storage_path, anche con S3:
+    # il file intero viene copiato sul backend solo a upload completato.
+    storage_backend: str = "local"
+    storage_path: str = ""
+    s3_endpoint: str = ""
+    s3_bucket: str = ""
+    s3_access_key: str = ""
+    s3_secret_key: str = ""
+    s3_region: str = "eu-south-1"
+    s3_prefix: str = "sopralluogo"
+    upload_chunk_bytes: int = 1024 * 1024
+    upload_max_bytes: int = 512 * 1024 * 1024
+
     prompts_dir: str = ""
     frontend_dir: str = ""
 
@@ -62,3 +76,8 @@ class Settings(BaseSettings):
         if self.frontend_dir:
             return Path(self.frontend_dir)
         return REPO_ROOT / "frontend"
+
+    def storage_dir(self) -> Path:
+        if self.storage_path:
+            return Path(self.storage_path)
+        return REPO_ROOT / "data" / "sopralluogo"

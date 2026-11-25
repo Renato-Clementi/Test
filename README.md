@@ -1,8 +1,15 @@
-# Lead wallbox
+# MOSAIKA
 
-Prototipo MOSAIKA per i commerciali di BABOO ESCo. Legge i lead della campagna Meta «Wallbox» (in questa versione da una fonte fittizia, oppure da Odoo 18 in sola lettura) e permette di qualificarli, preparare il sopralluogo a distanza, prendere note e tenere un registro di obiezioni con un assistente.
+Due prototipi nello stesso processo, con gli stessi utenti e lo stesso PostgreSQL.
 
-Non è un deploy. Non scrive su Odoo. Non va messo in produzione senza il consenso esplicito di Renato.
+- **Lead wallbox** (`/`) per i commerciali: lead della campagna Meta «Wallbox», qualifica, note, registro obiezioni.
+- **Sopralluogo** (`/sopralluogo/`) per il tecnico in cantiere: checklist con foto, video, audio, misure e documenti, anche offline.
+
+L'avvio è uno solo, descritto sotto. Nessuno dei due è un deploy. Nessuno scrive su Odoo. Non vanno messi in produzione senza il consenso esplicito di Renato.
+
+## Lead wallbox
+
+Legge i lead (in questa versione da una fonte fittizia, oppure da Odoo 18 in sola lettura) e permette di qualificarli, preparare il sopralluogo a distanza, prendere note e tenere un registro di obiezioni con un assistente.
 
 ## Avvio con Docker Compose
 
@@ -12,7 +19,7 @@ Serve Docker. Dalla radice del repository:
 docker compose up --build
 ```
 
-Apri `http://localhost:8000`. Il compose usa PostgreSQL e la fonte **mock**: non servono credenziali Odoo.
+Apri `http://localhost:8000` per i lead e `http://localhost:8000/sopralluogo/` per la checklist di cantiere. Il compose usa PostgreSQL e la fonte **mock**: non servono credenziali Odoo. I file del sopralluogo finiscono nel volume `mosaika_media`.
 
 Per sovrascrivere le variabili, copia `.env.example` in `.env` e adattalo. Il compose imposta già i default di sviluppo (segreto di sessione locale, fonte mock, produzione spenta).
 
@@ -70,6 +77,16 @@ Tutte con prefisso `MOSAIKA_`. L'elenco commentato è in `.env.example`. Non com
 | `MOSAIKA_AI_BASE_URL` | API OpenAI | Endpoint compatibile |
 | `MOSAIKA_AI_MODEL` | `gpt-4o-mini` | Modello, se si usa il provider OpenAI |
 | `MOSAIKA_SYNC_INTERVAL_SECONDS` | `600` | Rilettura della fonte (10 minuti) |
+| `MOSAIKA_STORAGE_BACKEND` | `local` | `local` oppure `s3` per i file del sopralluogo |
+| `MOSAIKA_STORAGE_PATH` | `data/sopralluogo` | Disco locale e area dei pezzi in transito |
+| `MOSAIKA_S3_ENDPOINT` | vuoto | Endpoint compatibile S3, se il backend è `s3` |
+| `MOSAIKA_S3_BUCKET` | vuoto | Bucket |
+| `MOSAIKA_S3_ACCESS_KEY` | vuoto | Access key. Non finisce nelle risposte API |
+| `MOSAIKA_S3_SECRET_KEY` | vuoto | Secret. Non finisce nelle risposte API |
+| `MOSAIKA_S3_REGION` | `eu-south-1` | Regione, se il provider la chiede |
+| `MOSAIKA_S3_PREFIX` | `sopralluogo` | Prefisso delle chiavi nel bucket |
+| `MOSAIKA_UPLOAD_CHUNK_BYTES` | `1048576` | Dimensione di un pezzo (i video grandi) |
+| `MOSAIKA_UPLOAD_MAX_BYTES` | `536870912` | Dimensione massima di un file (512 MiB) |
 
 ## Collegare l'istanza di test `esconnect18-test`
 
@@ -127,6 +144,8 @@ URL alternativo: `MOSAIKA_TEST_DATABASE_URL`.
 
 I test coprono il formato dei lead, i giorni di attesa, il salvataggio visibile ai tre ruoli, i link WhatsApp con prefisso 39 e il mittente collegato, il vincolo di validazione, la frase di rinvio dell'assistente, i colori e il viewport, e l'assenza di chiamate di scrittura verso Odoo (scansione del codice e rifiuto a runtime, prima della rete).
 
+Per il sopralluogo coprono il modello OPP 1733 (73 voci, capitoli, evidenze, consenso), l'import di un altro modello, i ruoli, il nome progressivo dei file e i metadati, l'upload a pezzi, lo ZIP, la chiusura, e la coda offline (serve `node` nel PATH).
+
 Il flusso nel browser (375 px, desktop, tema chiaro e scuro) è in `tests/test_ui.py`. Parte se nel venv c'è Playwright con Chromium:
 
 ```bash
@@ -142,6 +161,34 @@ pytest tests/test_ui.py
 - Il mittente dei messaggi WhatsApp è il nome dell'utente collegato.
 - Un'ora senza fuso, se arriva così all'API, è letta come Europe/Rome. Il browser invia l'istante in UTC.
 
+## Sopralluogo
+
+Checklist di raccolta dati in cantiere. Il primo modello è l'OPP 1733 (condominio Viale Bacchiglione 28, centrale ibrida e fotovoltaico), copiato dal PDF nel file `backend/mosaika/sopralluogo/templates/opp1733.yaml`. Si carica da solo al primo avvio. Un altro modello si aggiunge con `POST /api/sopralluogo/modelli` (YAML o JSON): se il codice esiste già l'import si rifiuta, così i rilievi già aperti non cambiano sotto i piedi.
+
+Entra con gli stessi utenti del lead wallbox. Marco (tecnico) e Renato (admin) compilano. Riccardo (commerciale) legge ed esporta, non carica file.
+
+Su un rilievo, voce per voce:
+
+- foto, video e audio: scatto o file, oppure registrazione nel browser (`MediaRecorder`), con caricamento del file se il microfono non c'è;
+- prima di un'intervista (le due voci che nel PDF dicono «con consenso») va spuntato il consenso, e resta salvato sul file insieme a chi parla;
+- misure con valore e unità; per le temperature anche ora e temperatura esterna;
+- testo breve, fatto, non applicabile;
+- le evidenze ancora mancanti restano visibili sulla voce.
+
+I file prendono il nome `prefisso-progressivo` (`CT-01`, `IDR-01`, …). Il prefisso `DOC` per «Prima di partire» non è nel PDF: il foglio numera solo le sette sezioni tecniche, e i documenti vanno comunque nominati. Il nome originale, la voce, il tipo, l'istante, l'autore e il GPS (se il telefono lo concede) stanno nel database e in un JSON accanto al file nello ZIP. Il numero si prenota all'inizio dell'upload e non si riusa: un invio abbandonato lascia un buco.
+
+In cantina o sul tetto la pagina resta apribile (service worker) e gli invii finiscono in una coda IndexedDB. Lo stato è in testata: in linea, non in linea, quanti file sono in coda. I video sopra 1 MiB, e comunque tutti i video, viaggiano a pezzi e possono riprendere dal pezzo successivo. La coda si prova da Node con `node backend/tests/coda_offline.mjs` (lo lancia anche pytest).
+
+«Prima di andare via» segnala le sezioni senza foto d'insieme o con misure aperte, le temperature di mandata e ritorno, la posizione dell'unità esterna, e l'elenco dei documenti che mancano con chi li manda e per quando. Poi nome del tecnico, data e ora, firma. Si può chiudere anche con voci aperte: il riepilogo le tiene.
+
+L'esportazione è `GET /api/sopralluogo/rilievi/{id}/export`: uno ZIP con una cartella per sezione, i file rinominati, il JSON di ciascun file, `riepilogo.csv` (separatore `;`), `riepilogo.json` e `relazione.html`. La relazione è raggruppata per capitolo di offerta (CAP. 3, CAP. 3 · 5, CAP. esclusa, …) e si stampa in PDF dal browser. Non c'è un generatore PDF nel prototipo.
+
+L'id opportunità (1733) è un numero facoltativo sul rilievo. Non parte nessuna chiamata a Odoo.
+
+### Storage
+
+`MOSAIKA_STORAGE_BACKEND=local` scrive in `MOSAIKA_STORAGE_PATH` (nel compose, il volume `mosaika_media`). Con `s3` il file intero va sul bucket (`MOSAIKA_S3_ENDPOINT`, `BUCKET`, `ACCESS_KEY`, `SECRET_KEY`, `REGION`, `PREFIX`); i pezzi in arrivo restano sul disco locale finché l'upload non è completo, così un video grosso non tiene tutto in memoria e può riprendere. Le chiavi e il secret non compaiono in `/api/health`.
+
 ## Decisioni prese in questa versione
 
 - Auth locale sostituibile, non il login Google.
@@ -152,9 +199,18 @@ pytest tests/test_ui.py
 - `lead_cache` tiene la copia letta, con `letto_il`. Lo stato di lavoro sta in `lead_stato` e non viene cancellato quando si rilegge Odoo.
 - Nessun deploy, da nessuna parte.
 
+Sul sopralluogo, in più:
+
+- Stesso processo e stessi utenti, modulo a `/sopralluogo/`, così resta riusabile dentro MOSAIKA senza un secondo deploy.
+- Il commerciale legge ed esporta; tecnico e admin scrivono.
+- I «capitoli» del controllo finale sono le sette sezioni numerate del modulo (centrale, idraulica, …), non un secondo raggruppamento per CAP. L'export, quello sì, è raggruppato per capitolo di offerta.
+- Un video con commento a voce copre sia V sia A, tranne le interviste, che vogliono un audio con consenso.
+- Il numero progressivo è di sezione, non di voce, come sul PDF (`CT-01`, `CT-02`, …).
+- La relazione leggibile è HTML stampabile. Niente libreria PDF.
+
 ## Domande aperte
 
-Restano quelle del brief, §12. Non sono decise.
+Restano quelle del brief dei lead, §12. Non sono decise.
 
 - Hosting del prototipo: VPS di MOSAIKA o altro?
 - Accesso: utenti propri o login con Google aziendale?
@@ -162,3 +218,12 @@ Restano quelle del brief, §12. Non sono decise.
 - Quando si può passare dalla lettura di `esconnect18-test` a quella della produzione.
 
 La lettura della produzione si accende solo con `MOSAIKA_ODOO_ALLOW_PRODUCTION=true`, e solo dopo il consenso esplicito di Renato. Questo repository non contiene un deploy.
+
+Sul sopralluogo restano aperti:
+
+- Per quanto si conservano foto, audio e GPS, e chi può scaricare lo ZIP (dentro ci sono interviste e dati di condominio).
+- Il testo del consenso va visto da chi segue la privacy: qui è una spunta, non un'informativa.
+- Il prefisso `DOC` per i documenti di «Prima di partire» è una scelta di questo prototipo.
+- Più tecnici sullo stesso rilievo, in contemporanea, non sono gestiti: il numero del file lo assegna il server all'invio.
+- Il collegamento vero all'opportunità Odoo (oggi è solo l'id, per esempio 1733).
+- Se il commerciale debba poter compilare anche lui, o restare in sola lettura.
