@@ -21,6 +21,8 @@ from mosaika.timeutil import adesso
 COOKIE = "mosaika_session"
 RUOLI = ("commerciale", "tecnico", "admin")
 VALIDATORI = ("tecnico", "admin")
+# Il sopralluogo in campo lo compila chi misura. Il commerciale legge ed esporta.
+SCRITTORI_SOPRALLUOGO = VALIDATORI
 
 
 def hash_password(password: str, iterations: int) -> str:
@@ -86,3 +88,7 @@ def leggi_sessione(token: str | None, secret: str) -> int | None:
 
 def puo_validare(ruolo: str) -> bool:
     return ruolo in VALIDATORI
+
+
+def puo_scrivere_sopralluogo(ruolo: str) -> bool:
+    return ruolo in SCRITTORI_SOPRALLUOGO

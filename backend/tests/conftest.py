@@ -1,4 +1,5 @@
 import os
+import tempfile
 
 import pytest
 from fastapi.testclient import TestClient
@@ -32,6 +33,9 @@ def settings():
         seed_password=PASSWORD,
         password_iterations=2_000,
         sync_interval_seconds=86_400,
+        storage_backend="local",
+        storage_path=tempfile.mkdtemp(prefix="mosaika-media-"),
+        s3_secret_key="SEGRETO-S3-NON-DEVE-USCIRE",
     )
 
 

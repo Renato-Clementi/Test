@@ -1,0 +1,331 @@
+# Modulo di sopralluogo OPP 1733, rev. 1.
+# Condominio Viale Bacchiglione 28, 20139 Milano.
+# Centrale termica ibrida e fotovoltaico. Le voci seguono il PDF.
+codice: opp-1733
+titolo: Sopralluogo centrale termica ibrida e fotovoltaico
+sito: "Viale Bacchiglione 28, 20139 Milano"
+revisione: "1"
+odoo_opportunity_id: 1733
+perimetro: "Perimetro Geoside: caldaia 150 kW, pompa di calore 30 kWt, FV 20 kWp, contatori, telecontrollo."
+istruzioni: >
+  Nomi dei file: prefisso di sezione e numero progressivo
+  (CT-01, IDR-01, PDC-01, EL-01, RAD-01, TET-01, CAN-01).
+  Detto all'inizio di ogni video o nota vocale, aggancia la ripresa
+  alla voce del capitolato. Foto con metro o oggetto noto in campo:
+  prima una vista d'insieme, poi il dettaglio. Video lento, in
+  orizzontale, con commento a voce. Note vocali per ambiente;
+  interviste solo con il consenso di chi parla. Per le temperature,
+  valore e unità, e anche ora ed esterna. I documenti si chiedono
+  prima o si raccolgono in loco, anche come foto del documento.
+sezioni:
+  - codice: PRE
+    titolo: Prima di partire
+    sottotitolo: Documenti da chiedere all'amministratore e al terzo responsabile
+    prefisso: DOC
+    tipo: documenti
+    voci:
+      - testo: "Libretto di impianto aggiornato con ultima analisi fumi e rapporto di controllo"
+        evidenze: [D]
+        capitolo: "3"
+      - testo: "DiCo esistenti, eventuale SCIA VV.F. e pratica INAIL della centrale"
+        evidenze: [D]
+        capitolo: "7"
+      - testo: "Planimetrie: centrale termica, piano tipo, copertura, sezione edificio"
+        evidenze: [D]
+        capitolo: "3·5"
+      - testo: "Bolletta elettrica condominiale recente: POD, potenza impegnata e disponibile"
+        evidenze: [D]
+        capitolo: "4"
+      - testo: "Contratto terzo responsabile (RG Termotecnica): scadenza e preavviso"
+        evidenze: [D]
+        capitolo: "—"
+      - testo: "Contratto ripartitori: marca, modello, telelettura sì/no, scadenza"
+        evidenze: [D]
+        capitolo: "2"
+      - testo: "Numero unità servite e tabella millesimi riscaldamento (25 o 27?)"
+        evidenze: [D]
+        capitolo: "—"
+
+  - codice: STR
+    titolo: Strumenti
+    sottotitolo: Da portare
+    tipo: strumenti
+    voci:
+      - testo: "Metro laser e rotella"
+      - testo: "Inclinometro"
+      - testo: "Bussola (o app)"
+      - testo: "Termometro a contatto o sonde a fascetta"
+      - testo: "Termocamera"
+      - testo: "Pinza amperometrica"
+      - testo: "Fonometro (tecnico competente in acustica)"
+      - testo: "Drone o asta telescopica per la copertura"
+      - testo: "Torcia"
+      - testo: "DPI per il tetto"
+
+  - codice: CT
+    titolo: "1 · Centrale termica"
+    sottotitolo: Locale, accessi e generatore esistente
+    prefisso: CT
+    tipo: raccolta
+    voci:
+      - testo: "Ubicazione del locale (interrato, piano terra, sottotetto) e percorso dalla strada"
+        evidenze: [F, V, T]
+        capitolo: "3·4"
+      - testo: "Dimensioni del locale L × P × H"
+        evidenze: [M]
+        capitolo: "3"
+        unita_suggerita: m
+        ripetibile: true
+        etichette: [L, P, H]
+      - testo: "Larghezza e altezza minima di porte, scale e passaggi (ingresso caldaia ~0,8 × 1,9 m)"
+        evidenze: [M, F]
+        capitolo: "4"
+        unita_suggerita: m
+        ripetibile: true
+      - testo: "Aperture di aerazione: dimensioni e posizione"
+        evidenze: [M, F]
+        capitolo: "7"
+        unita_suggerita: m
+        ripetibile: true
+      - testo: "Modulex 190: targa, moduli in funzione, display con errori e ore di lavoro"
+        evidenze: [F]
+        capitolo: "3"
+      - testo: "Canna fumaria: materiale, diametro, altezza, percorso, sbocco in copertura"
+        evidenze: [F, M, V]
+        capitolo: "3"
+        unita_suggerita: mm
+        ripetibile: true
+      - testo: "Linea gas: diametro, materiale, posizione contatore e valvola esterna"
+        evidenze: [F, M]
+        capitolo: "3"
+        unita_suggerita: mm
+      - testo: "Scarico condensa e piletta a pavimento: distanza dalla fognatura"
+        evidenze: [F, M]
+        capitolo: "3"
+        unita_suggerita: m
+      - testo: "Coibentazioni e guarnizioni: segni di materiali contenenti amianto"
+        evidenze: [F, T]
+        capitolo: "4"
+      - testo: "Video lento di tutta la centrale con commento a voce (2-3 minuti)"
+        evidenze: [V, A]
+        capitolo: "3"
+
+  - codice: IDR
+    titolo: "2 · Idraulica e regolazione"
+    sottotitolo: Quello che si tiene, si sposta o si sostituisce
+    prefisso: IDR
+    tipo: raccolta
+    voci:
+      - testo: "Diametri collettori di mandata e ritorno (DN) e materiale tubazioni"
+        evidenze: [F, M]
+        capitolo: "3"
+        unita_suggerita: DN
+        ripetibile: true
+        etichette: [Mandata, Ritorno]
+      - testo: "Circolatori: targhe, giri fissi o variabili, numero circuiti"
+        evidenze: [F]
+        capitolo: "3"
+      - testo: "Vaso di espansione: aperto o chiuso, volume, precarica"
+        evidenze: [F]
+        capitolo: "3"
+      - testo: "Separatore o scambiatore esistente, valvole miscelatrici, valvolame"
+        evidenze: [F]
+        capitolo: "3"
+      - testo: "Trattamento acqua: addolcitore, filtro, durezza misurata"
+        evidenze: [F, M]
+        capitolo: "3"
+        unita_suggerita: "°f"
+      - testo: "Centralina: modello, curva climatica impostata, orari di accensione (foto del display)"
+        evidenze: [F, T]
+        capitolo: "3"
+      - testo: "Temperatura mandata e ritorno con ora e temperatura esterna (almeno 2 letture)"
+        evidenze: [M]
+        capitolo: "3"
+        unita_suggerita: "°C"
+        temperatura: true
+        misure_minime: 2
+        ripetibile: true
+        etichette: [Mandata, Ritorno]
+        chiave: temperatura_mandata_ritorno
+      - testo: "Spazio libero per accumulo inerziale 800 l (Ø ~0,8 m, h ~2 m)"
+        evidenze: [M]
+        capitolo: "4"
+        unita_suggerita: m
+        ripetibile: true
+
+  - codice: PDC
+    titolo: "3 · Pompa di calore esterna"
+    sottotitolo: Dove si mette e come ci si arriva
+    prefisso: PDC
+    tipo: raccolta
+    voci:
+      - testo: "Posizioni candidate: cortile, porzione piana del tetto, altro"
+        evidenze: [F, V]
+        capitolo: "3"
+        chiave: posizione_unita_esterna
+      - testo: "Area disponibile e portata del piano di appoggio (unità 400-600 kg)"
+        evidenze: [M, T]
+        capitolo: "4"
+        unita_suggerita: "m²"
+      - testo: "Distanza e percorso delle tubazioni fino alla centrale, attraversamenti e carotaggi"
+        evidenze: [M, F]
+        capitolo: "3"
+        unita_suggerita: m
+      - testo: "Distanza dalle finestre più vicine e dal confine (civico 30, stazione di servizio)"
+        evidenze: [M]
+        capitolo: "3"
+        unita_suggerita: m
+        ripetibile: true
+      - testo: "Rumore di fondo diurno e serale nel punto più sensibile"
+        evidenze: [M]
+        capitolo: "7"
+        unita_suggerita: "dB(A)"
+        misure_minime: 2
+        ripetibile: true
+        etichette: [Diurno, Serale]
+      - testo: "Accesso per autogru o sollevamento: larghezza strada, ostacoli, suolo pubblico"
+        evidenze: [F, M, T]
+        capitolo: "4"
+        unita_suggerita: m
+      - testo: "Distanze di sicurezza dalla stazione di servizio (zone di rischio)"
+        evidenze: [M, T]
+        capitolo: "7"
+        unita_suggerita: m
+
+  - codice: EL
+    titolo: "4 · Impianto elettrico"
+    sottotitolo: Aumento POD e nuove linee
+    prefisso: EL
+    tipo: raccolta
+    voci:
+      - testo: "Contatore condominiale: foto della targa, matricola, POD, potenza"
+        evidenze: [F]
+        capitolo: "4"
+      - testo: "Quadro generale servizi comuni: stato, interruttori, spazio libero"
+        evidenze: [F]
+        capitolo: "4"
+      - testo: "Percorso e lunghezza della linea quadro → centrale → pompa di calore"
+        evidenze: [M]
+        capitolo: "4"
+        unita_suggerita: m
+      - testo: "Impianto di terra: posizione del dispersore e del nodo"
+        evidenze: [F]
+        capitolo: "4"
+      - testo: "Punto per inverter FV e contatore di produzione, cavedio per i cavi dal tetto"
+        evidenze: [F, M]
+        capitolo: "5"
+        unita_suggerita: m
+      - testo: "Copertura del segnale mobile in centrale (gateway telecontrollo)"
+        evidenze: [T]
+        capitolo: "2"
+
+  - codice: RAD
+    titolo: "5 · Distribuzione e radiatori"
+    sottotitolo: Campione di 3-4 appartamenti, piani alti e bassi
+    prefisso: RAD
+    tipo: raccolta
+    voci:
+      - testo: "Numero colonne montanti e posizione"
+        evidenze: [F, T]
+        capitolo: "—"
+      - testo: "Per ogni appartamento: tipo radiatore, dimensioni, numero elementi"
+        evidenze: [F, M]
+        capitolo: "—"
+        unita_suggerita: mm
+        ripetibile: true
+      - testo: "Valvole termostatiche e ripartitori: marca, modello, data"
+        evidenze: [F]
+        capitolo: "1·2"
+      - testo: "Temperatura superficiale dei radiatori con ora (termocamera)"
+        evidenze: [F, M]
+        capitolo: "—"
+        unita_suggerita: "°C"
+        con_ora: true
+        ripetibile: true
+      - testo: "Lamentele di comfort raccontate dagli occupanti (audio con consenso)"
+        evidenze: [A]
+        capitolo: "—"
+        consenso_richiesto: true
+
+  - codice: TET
+    titolo: "6 · Copertura e fotovoltaico"
+    sottotitolo: Falda sud-sud-est e porzione piana
+    prefisso: TET
+    tipo: raccolta
+    voci:
+      - testo: "Accesso al tetto: botola, lucernario, scala; linea vita presente sì/no"
+        evidenze: [F, T]
+        capitolo: "5"
+      - testo: "Riprese aeree o panoramiche di tutta la copertura (drone o video 360°)"
+        evidenze: [F, V]
+        capitolo: "5"
+      - testo: "Misure falda SSE: gronda, larghezza, colmo-gronda; orientamento"
+        evidenze: [M]
+        capitolo: "5"
+        unita_suggerita: m
+        ripetibile: true
+        etichette: [Gronda, Larghezza, Colmo-gronda, Orientamento]
+      - testo: "Pendenza della falda (inclinometro)"
+        evidenze: [M]
+        capitolo: "5"
+        unita_suggerita: "°"
+      - testo: "Tipo di tegola con metro in foto, stato, tegole rotte o spostate"
+        evidenze: [F]
+        capitolo: "5"
+      - testo: "Ingombri: comignoli, antenne, lucernari, sfiati (posizione e altezza)"
+        evidenze: [F, M]
+        capitolo: "5"
+        unita_suggerita: m
+        ripetibile: true
+      - testo: "Porzione piana ~50 m²: impermeabilizzazione, macchinari, spazio libero"
+        evidenze: [F, M]
+        capitolo: "3·5"
+        unita_suggerita: "m²"
+      - testo: "Sottotetto: struttura, isolamento presente o no, tracce di infiltrazione"
+        evidenze: [F, V]
+        capitolo: esclusa
+      - testo: "Percorso dei cavi dal tetto al quadro: cavedi, scale, facciate"
+        evidenze: [F, M]
+        capitolo: "5"
+        unita_suggerita: m
+
+  - codice: CAN
+    titolo: "7 · Cantiere e vincoli"
+    sottotitolo: Quello che sposta tempi e costi
+    prefisso: CAN
+    tipo: raccolta
+    voci:
+      - testo: "Area di stoccaggio materiali e posizione del cassone"
+        evidenze: [F, T]
+        capitolo: "4"
+      - testo: "Necessità di ponteggio, cestello o autoscala per tetto e facciate"
+        evidenze: [F, T]
+        capitolo: "5"
+      - testo: "Orari e periodi in cui non si può lavorare; fermo impianto accettabile"
+        evidenze: [A, T]
+        capitolo: "4"
+      - testo: "Vincoli di condominio: regolamento, consenso del civico 30 per il cortile"
+        evidenze: [A, T]
+        capitolo: "—"
+      - testo: "Interviste ad amministratore, consiglieri, terzo responsabile (audio con consenso)"
+        evidenze: [A]
+        capitolo: "—"
+        consenso_richiesto: true
+
+  - codice: FIN
+    titolo: Prima di andare via
+    sottotitolo: Controlli prima di lasciare l'edificio
+    tipo: chiusura
+    voci:
+      - testo: "Ogni capitolo ha almeno una foto d'insieme e le misure che lo quotano"
+        chiave: controllo_foto_misure
+      - testo: "Temperature di mandata e ritorno lette e scritte con ora e temperatura esterna"
+        chiave: controllo_temperature
+      - testo: "Posizione dell'unità esterna concordata o con alternative fotografate"
+        chiave: controllo_posizione
+      - testo: "Elenco dei documenti mancanti e chi li manda, con una data"
+        chiave: controllo_documenti
+      - testo: "Tecnico BABOO, data e ora"
+        chiave: controllo_tecnico
+      - testo: "Firma del tecnico"
+        chiave: controllo_firma

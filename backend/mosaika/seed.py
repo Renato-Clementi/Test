@@ -11,6 +11,7 @@ from sqlalchemy import func, select
 
 from mosaika.auth import hash_password
 from mosaika.models import Obiezione, Utente
+from mosaika.sopralluogo.seed import seed_modelli
 from mosaika.timeutil import adesso
 
 UTENTI = (
@@ -70,4 +71,5 @@ def seed(db, settings) -> None:
                     creata_da=None,
                 )
             )
+    seed_modelli(db)
     db.commit()

@@ -28,6 +28,10 @@ services:
       MOSAIKA_AI_PROVIDER: mock
       MOSAIKA_SEED_PASSWORD: mosaika-dev
       MOSAIKA_SYNC_INTERVAL_SECONDS: "600"
+      MOSAIKA_STORAGE_BACKEND: local
+      MOSAIKA_STORAGE_PATH: /data/sopralluogo
+    volumes:
+      - mosaika_media:/data/sopralluogo
     depends_on:
       db:
         condition: service_healthy
@@ -35,3 +39,4 @@ services:
 
 volumes:
   mosaika_pg:
+  mosaika_media:

@@ -96,6 +96,7 @@ function barra(attivo) {
         <nav>
           <a href="#/lead" ${attivo === "lead" ? 'aria-current="page"' : ""}>Lead</a>
           <a href="#/obiezioni" ${attivo === "obiezioni" ? 'aria-current="page"' : ""}>Obiezioni</a>
+          <a href="/sopralluogo/">Sopralluogo</a>
         </nav>
         <span class="spazio"></span>
         <span class="ruolo">${esc(state.user.nome)} · ${esc(state.user.ruolo)}</span>

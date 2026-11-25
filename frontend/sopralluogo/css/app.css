@@ -1,0 +1,64 @@
+.sync {
+  width: 100%;
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.leggenda, .prove, .file-lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.voce-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.nome-file {
+  overflow-wrap: anywhere;
+  font-family: var(--mono);
+  font-size: 13px;
+}
+
+.manca { color: var(--late); }
+
+.flag {
+  border-left: 3px solid var(--line);
+  padding-left: 10px;
+  margin: 10px 0;
+}
+
+.flag.no { border-color: var(--late); }
+.flag.ok { border-color: var(--ok); }
+
+canvas.firma {
+  width: 100%;
+  height: 160px;
+  max-width: 100%;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  touch-action: none;
+  display: block;
+}
+
+video.anteprima {
+  width: 100%;
+  max-height: 220px;
+  border-radius: 12px;
+  background: #000;
+}
+
+input[type="file"] { width: 100%; }
+
+.riga-misura {
+  display: grid;
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+}
